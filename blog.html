@@ -3,23 +3,129 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 		<title>The development blog of William Merfalen</title>
+		<style type="text/css">
+			:root {
+				--main-bg-color: black;
+				--main-color: white;
+			}
+			body h1 {
+				font-size: 4em;
+				color: red;
+			}
+			body h4 {
+				font-size: 2em;
+			}
+			body {
+				background-color: var(--main-bg-color);
+				color: var(--main-color);
+				font-family: courier new;
+			}
+			body p {
+				padding: 3em;
+				margin-right: 30em;
+				border: 1px solid var(--main-color);
+			}
+			body ul li a {
+				text-decoration: none;
+				color: var(--main-color);
+			}
+			body ul li a::active {
+				text-decoration: none;
+				color: var(--main-color);
+			}
+			body ul li a::visited {
+				text-decoration: none;
+				color: var(--main-color);
+			}
+			body ul.nav li {
+				list-style: none;
+				float: left;
+				padding-left: 1em;
+			}
+			body ul.nav li a.current {
+				color: red;
+			}
+			.theme-selector-wrapper {
+				float: right;
+			}
+		</style>
+	<script type="text/javascript">
+		window.onload = function(){
+			const currentUrl = window.location.href.match(/\/([a-z]+)\.html$/);
+			if(currentUrl){
+				let ele = document.querySelector('a[href="' + currentUrl[0] + '"]');
+				if(ele){
+					ele.classList.add('current');
+				}
+			}
+		};
+		function switchTheme(pallette){
+			let color='black', bgColor='white';
+			switch(pallette){
+				case 'Light':
+					color='black';
+					bgColor='white';
+					break;
+				case 'Dark':
+					color='white';
+					bgColor='black';
+					break;
+				case 'Grey':
+					color='white';
+					bgColor='grey';
+					break;
+				default:
+					break;
+			}
+			const tagList=['body','p','a','li']
+			for(let tag of tagList){
+				let elements = document.getElementsByTagName(tag);
+				for(let i=0; i < elements.length; i++){
+					elements[i].style.setProperty('--main-bg-color',bgColor);
+					elements[i].style.setProperty('--main-color',color);
+				}
+			}
+		}
+		function goLight(){
+			switchTheme('Light');
+		}
+		function goDark(){
+			switchTheme('Dark');
+		}
+		function goGrey(){
+			switchTheme('Grey');
+		}
+	</script>
 	</head>
 	<body>
+		<ul class="nav">
+			<li><a href="/index.html">Home</a></li>
+			<li><a href="/blog.html">Blog</a></li>
+			<li><a href="/code.html">Code</a></li>
+			<li><a href="/contact.html">Contact</a></li>
+		</ul>
+		<br/>
+		<div class="theme-selector-wrapper">
+			<button onclick="goLight();">Light theme</button>
+			<button onclick="goDark();">Dark theme</button>
+			<button onclick="goGrey();">Grey theme</button>
+		</div>
 		<h1>Recalling lessons from my past</h1>
-		<h4>2021-09-07</h4>
+		<h4>[written on 2021-09-07]</h4>
 		<p>
 			Hindsight is 20/20. The errors of our past and our inabilities to fix them are truly the stuff of nightmares. The existential dread
 			of imposter syndrome... the effects of knowing that you're incapable of fixing something because you lack the experience or proper
 			guidance. These issues affect us everyday. Even if you're a grizzled vet. I think every coder has reached a point where they didn't
 			know how to solve an issue. How many are willing to admit it? How many people let it affect their sleeping habits? Do you lay awake
 			beating yourself up for not knowing how to fix a specific issue? Even worse: did you fail in every way to address it? Did it cause
-			you grief?<br/>
+			you grief?
+			<br/><br/>
 			The good news is that if you've let a problem affect you to the point of losing sleep, you're probably one of the better programmers
 			among your peers, in a way. If you care enough about a problem to let it negatively affect you, not only does it mean you care, it also
 			means you're growing. It means you're a human. It means that it might have stumped you this time, but the next time it happens, you're
 			ready for it. You've re-run the situation over and over in your head to the point that it's not even a problem anymore.. it's merely
-			a minor inconvenience compared to bigger problems you're tackling.<br/>
-			<br/>
+			a minor inconvenience compared to bigger problems you're tackling.
+			<br/><br/>
 
 			What separates a senior developer from a junior developer? A senior developer has seen the correct solution to a problem a junior dev
 			is currently stuck on.
@@ -27,22 +133,23 @@
 			
 			In no way am I advocating that a problem shoud take a physical toll on your health and well-being. You should do everything in your
 			power to live a healthy and grounded life full of joy and happiness. You owe it to yourself for working in a profession that habitually
-			and consistently gas-lights you into thinking that you <b>surely</b> have lost your last bit of sanity.<br/>
+			and consistently gas-lights you into thinking that you <b>surely</b> have lost your last bit of sanity.
 			So when it comes to problems in the digital world, it's not uncommon to feel a bit overwhelmed. I think it's normal to acknowledge these
 			things and to address it healthily. I'd like to personally share a problem from my past which I had no idea how to solve. 
-			<br/>
+			<br/><br/>
 			It was about a year into my professional career as a PHP developer. I was working on a script that had to consume an abnormally large
 			XML feed. This feed was about 900 megabytes in length.. and the way we were consuming it was as one long HTTP GET request. For the
 			first month or so, the size of this feed never exceeded 900 megabytes. All was well. Until, out of nowhere, our script would die
 			unexpectedly.. and it wasn't like it was dying out of nowhere, it was dying consistently starting at a specific date. The good news
 			was that we were able to see the reason for the script dying... and every PHP coder has reached this point too: the script was 
 			running out of memory. The dreaded memory limit problem that every PHP developer has to address at some point in their career.
-			<br/>
+			<br/><br/>
 			Now, the most common "fix" that even a fledgling Linux administrator can deploy without a shred of PHP knowledge is to bump up the memory limits of the script.
 			Bumping the memory limit is often times a temporary fix to a bigger problem. Since we were consuming this XML feed by chucking into
 			a DOMDocument object, we could technically handle this issue by inflating the memory limit. But this would not suffice. This was far
 			from the ideal situation, but the real solution to this issue would be to do something that a systems development coder could probably
-			do in his or her sleep: write a streaming XML parser.<br/>
+			do in his or her sleep: write a streaming XML parser.
+			<br/><br/>
 			Having written a templating engine of my own (and albeit a rather simplistic one), I feel like I could confidently solve this issue
 			were it to come up again. The true reason why a newbie PHP developer is stumped by this issue is partly because of the nature of
 			Web Development in general. It is not uncommon for a PHP developer to have zero systems development experience. It is not uncommon
@@ -53,14 +160,16 @@
 			concepts initially. You don't have to worry about manually allocating memory, or (god forbid) freeing it. PHP handles that.. and if
 			you're using a framework, you're a bit more disconnected from those horrors. I think that's been my main gripe with using
 			an MVC framework like the massively popular Laravel framework. I think Laravel is great, and it's massively fun to program in,
-			but I feel like it creates an even bigger rift between real world problems and developers in general.<br/>
+			but I feel like it creates an even bigger rift between real world problems and developers in general.
+			<br/><br/>
 			If you've worked with me for any amount of time, I've harped about these issues endlessly and this is surely not new content.
 			In fact, I probably bring it up too much. If you hear me suggesting anything related to this post, you're likely someone that
 			I see as possessing massive potential. Everyone can benefit from knowing how to solve these issues.
+			<br/><br/>
 		</p>
 		
 		<h1>Why I recommend everyone read the K&amp;R C book</h1>
-		<h4>2021-09-07</h4>
+		<h4>[written on 2021-09-07]</h4>
 		<p>It is a little known fact that the K&amp;R C book is one of the best books to read <b>when you are learning the C programming language</b>. 
 		But that's not even remotely true, if you ask me. I firmly believe that every coder should read this timeless classic.
 		It's not because I'm a staunch proponent of learning systems development. It hardly even has anything to do with loving the C++ programming
